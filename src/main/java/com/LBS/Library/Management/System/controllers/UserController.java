@@ -1,6 +1,7 @@
 package com.LBS.Library.Management.System.controllers;
 
 import com.LBS.Library.Management.System.dtos.BookDto;
+import com.LBS.Library.Management.System.dtos.RentalsDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/viewHistory")
-    public List<Rentals> viewBorrowedHistory(@RequestParam(value = "uniqueId", required = true) String uniqueId){
+    public List<RentalsDto> viewBorrowedHistory(@RequestParam(value = "uniqueId", required = true) String uniqueId){
         return userService.viewBorrowedHistory(uniqueId);
     }
     @GetMapping("/profile")

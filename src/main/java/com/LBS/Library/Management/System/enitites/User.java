@@ -1,5 +1,6 @@
 package com.LBS.Library.Management.System.enitites;
 
+import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,16 +41,22 @@ public class User {
             borrowedBooks.add(rental);
         }
         else{
-            throw new IllegalStateException("You already have this book");
+            throw new GlobalRuntimeException("You already have this book");
         }
     }
-    public boolean isWithUser(Rentals rental){
-        String bookName = rental.getBook().getBookName();
-        for(Rentals book_in_list: borrowedBooks){
-            return rental.getBook().getBookName().equalsIgnoreCase(bookName);
+    public boolean isWithUser(Rentals rental) {
+        Book incomingBook = rental.getBook();
+
+        for (Rentals r : borrowedBooks) {
+            Book borrowedBook = r.getBook();
+            if (borrowedBook.getBookID().equals(incomingBook.getBookID()) && r.getReturned() == null) {
+                return true;
+            }
         }
+
         return false;
     }
+
 
     public void returnBook(Rentals rental){
         borrowedBooks.remove(rental);

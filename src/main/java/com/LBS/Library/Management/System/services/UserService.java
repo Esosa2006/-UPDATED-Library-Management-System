@@ -2,11 +2,13 @@ package com.LBS.Library.Management.System.services;
 
 import com.LBS.Library.Management.System.AvailabilityStatus;
 import com.LBS.Library.Management.System.dtos.BookDto;
+import com.LBS.Library.Management.System.dtos.RentalsDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import com.LBS.Library.Management.System.mappers.BookMapper;
+import com.LBS.Library.Management.System.mappers.RentalsMapper;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
@@ -22,24 +24,19 @@ public class UserService {
     private final BookMapper bookMapper;
     private final UserRepository userRepository;
     private final RentalRepository rentalRepository;
+    private  final RentalsMapper rentalsMapper;
 
     @Autowired
-    public UserService(BookRepository bookRepository, BookMapper bookMapper, UserRepository userRepository, RentalRepository rentalRepository) {
+    public UserService(BookRepository bookRepository, BookMapper bookMapper, UserRepository userRepository, RentalRepository rentalRepository, RentalsMapper rentalsMapper) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
         this.userRepository = userRepository;
         this.rentalRepository = rentalRepository;
+        this.rentalsMapper = rentalsMapper;
     }
 
     public List<BookDto> getAllBooks() {
-        return bookRepository.findAll().stream().map(book -> {
-            BookDto dto = new BookDto();
-            dto.setBookName(book.getBookName());
-            dto.setAuthor(book.getAuthor());
-            dto.setCategory(book.getCategory());
-            dto.setAvailabilityStatus(book.getAvailabilityStatus());
-            return dto;
-        }).toList();
+        return bookRepository.findAll().stream().map(bookMapper::toDto).toList();
     }
 
 
@@ -64,6 +61,11 @@ public class UserService {
     public ResponseEntity<String> borrowBook(String email, String bookName) {
         User user = userRepository.findByemail(email);
         Book book = bookRepository.findBybookName(bookName);
+        Rentals rental = new Rentals();
+        rental.setDateGotten();
+        rental.setBook(book);
+        rental.setUser(user);
+        rental.setRentalName(book);
         if(user.getEmail() == null){
             throw new GlobalRuntimeException("User not found!");
         }
@@ -73,10 +75,10 @@ public class UserService {
         if(book.getAvailabilityStatus() == AvailabilityStatus.NOT_AVAILABLE){
             throw new GlobalRuntimeException("Sold out!");
         }
-        Rentals rental = new Rentals();
-        rental.setDateGotten();
-        rental.setBook(book);
-        rental.setUser(user);
+
+        if(user.isWithUser(rental)){
+            throw new GlobalRuntimeException("You already have this book");
+        }
         Integer bookQty = book.getQuantity();
         book.setQuantity(bookQty - 1);
         book.setStatus();
@@ -87,36 +89,38 @@ public class UserService {
         return ResponseEntity.ok("Enjoy your book");
     }
 
-    public List<Rentals> viewBorrowedHistory(String uniqueId) {
+    public List<RentalsDto> viewBorrowedHistory(String uniqueId) {
         User user = userRepository.findByuniqueID(uniqueId);
         if(user.getEmail() == null) {
             throw new GlobalRuntimeException("User not found");
         }
-        return user.getBorrowedBooks();
+        return user.getBorrowedBooks().stream().map(rentalsMapper::toDto).toList();
     }
 
     public ResponseEntity<String> returnBook(String email, String bookName) {
-        User user =  userRepository.findByemail(email);
+        User user = userRepository.findByemail(email);
         Book book = bookRepository.findBybookName(bookName);
-        Rentals rental = new Rentals();
-        rental.setBook(book);
-        if (user.getName() == null){
+
+        if (user == null || user.getName() == null) {
             throw new GlobalRuntimeException("User does not exist!");
         }
-        if(book.getBookName() == null){
-            throw new GlobalRuntimeException("Book does not exist");
+
+        if (book == null || book.getBookName() == null) {
+            throw new GlobalRuntimeException("Book does not exist!");
         }
-        Integer bookQty = book.getQuantity();
-        if(user.isWithUser(rental)){
-            user.returnBook(rental);
-            book.setQuantity(bookQty + 1);
-        }
-        rental.setDateReturned();
-        rentalRepository.save(rental);
+
+        Rentals rentalToReturn = rentalRepository
+                .findByUserAndBookAndReturnedIsNull(user, book)
+                .orElseThrow(() -> new GlobalRuntimeException("You do not have this book"));
+
+        rentalToReturn.setDateReturned();
+        book.setQuantity(book.getQuantity() + 1);
+        rentalRepository.save(rentalToReturn);
         bookRepository.save(book);
         userRepository.save(user);
         return ResponseEntity.ok("Book has been successfully returned!");
     }
+
 
     public User viewProfile(String uniqueId) {
         User user = userRepository.findByuniqueID(uniqueId);

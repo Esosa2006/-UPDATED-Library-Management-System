@@ -16,12 +16,12 @@ public class Rentals {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
-
+    private String rentalName;
     private LocalDate dateBorrowed;
     private LocalDate dueDate;
     private LocalDate returned;
@@ -36,7 +36,9 @@ public class Rentals {
         this.returned = LocalDate.now();
     }
 
-
+    public void setRentalName(Book book){
+        this.rentalName = book.getBookName();
+    }
     public void updateOverdue(){
         if(returned == null && LocalDate.now().isAfter(dueDate)){
             overdue = true;
