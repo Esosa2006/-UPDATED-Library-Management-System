@@ -5,6 +5,7 @@ import com.LBS.Library.Management.System.dtos.BookDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
+import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import com.LBS.Library.Management.System.mappers.BookMapper;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
@@ -64,13 +65,13 @@ public class UserService {
         User user = userRepository.findByemail(email);
         Book book = bookRepository.findBybookName(bookName);
         if(user.getEmail() == null){
-            throw new IllegalStateException("User not found, please register!");
+            throw new GlobalRuntimeException("User not found!");
         }
         if (book.getBookName() == null){
-            throw new IllegalStateException("Book not found!");
+            throw new GlobalRuntimeException("Book not found!");
         }
         if(book.getAvailabilityStatus() == AvailabilityStatus.NOT_AVAILABLE){
-            throw new IllegalStateException("Sold out!");
+            throw new GlobalRuntimeException("Sold out!");
         }
         Rentals rental = new Rentals();
         rental.setDateGotten();
@@ -89,7 +90,7 @@ public class UserService {
     public List<Rentals> viewBorrowedHistory(String uniqueId) {
         User user = userRepository.findByuniqueID(uniqueId);
         if(user.getEmail() == null) {
-            throw new IllegalStateException("User not found!");
+            throw new GlobalRuntimeException("User not found");
         }
         return user.getBorrowedBooks();
     }
@@ -100,10 +101,10 @@ public class UserService {
         Rentals rental = new Rentals();
         rental.setBook(book);
         if (user.getName() == null){
-            throw new IllegalStateException("User does not exist");
+            throw new GlobalRuntimeException("User does not exist!");
         }
         if(book.getBookName() == null){
-            throw new IllegalStateException("Book does not exist");
+            throw new GlobalRuntimeException("Book does not exist");
         }
         Integer bookQty = book.getQuantity();
         if(user.isWithUser(rental)){
@@ -120,7 +121,7 @@ public class UserService {
     public User viewProfile(String uniqueId) {
         User user = userRepository.findByuniqueID(uniqueId);
         if(user.getEmail() == null){
-            throw new IllegalStateException("User not found!");
+            throw new GlobalRuntimeException("User not found!");
         }
         return user;
     }

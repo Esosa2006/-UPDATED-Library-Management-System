@@ -5,6 +5,7 @@ import com.LBS.Library.Management.System.dtos.UserRegistrationDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
+import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
@@ -47,14 +48,14 @@ public class LibrarianService {
 
     public void addNewBook(Book book) {
         if (bookRepository.existsById(book.getBookID())){
-            throw new IllegalStateException("Book already exists in inventory");
+            throw new GlobalRuntimeException("Book already exists in inventory");
         }
         book.setStatus();
         bookRepository.save(book);
     }
 
     public ResponseEntity<Book> updateBookFields(Long id, Map<String, Object> updates) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalStateException("Could not find book"));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new GlobalRuntimeException("Could not find book"));
         if(updates.containsKey("bookName")){
             book.setBookName(String.valueOf(updates.get("bookName")));
         }
@@ -71,7 +72,7 @@ public class LibrarianService {
     }
 
     public ResponseEntity<String> deleteVideo(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalStateException("Video not found!"));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new GlobalRuntimeException("Video not found!"));
         bookRepository.delete(book);
         return ResponseEntity.ok("Book successfully deleted");
     }
