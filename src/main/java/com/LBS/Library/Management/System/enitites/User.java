@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Entity
-@Table
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,33 +24,36 @@ public class User {
     private String uniqueID;
     private String email;
     private String phone_no;
-    private ArrayList<Book> borrowedBooks;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rentals> borrowedBooks = new ArrayList<>();
 
-    @PrePersist
-    public void setUniqueID(String name){
+    public void setUniqueID(){
         Random rand = new Random();
-        rand.nextInt(0, 500);
+        int randomNum = rand.nextInt(500);
         String part_of_name = name.substring(0, 5);
-        this.uniqueID = part_of_name + rand.toString();
+        this.uniqueID = part_of_name + randomNum;
     }
 
-    public void storeBorrowedBook(Book book){
-        String bookName = book.getBookName();
-        for(Book book_in_list: borrowedBooks){
-            if (!book.getBookName().equalsIgnoreCase(bookName)){
-                borrowedBooks.add(book);
-            }
+    public void storeBorrowedBook(Rentals rental){
+        String rentalName = rental.getBook().getBookName();
+        if(borrowedBooks.isEmpty() || (!borrowedBooks.contains(rental))){
+            borrowedBooks.add(rental);
+        }
+        else{
+            throw new IllegalStateException("You already have this book");
         }
     }
-    public boolean isWithUser(Book book){
-        String bookName = book.getBookName();
-        for(Book book_in_list: borrowedBooks){
-            return book.getBookName().equalsIgnoreCase(bookName);
+    public boolean isWithUser(Rentals rental){
+        String bookName = rental.getBook().getBookName();
+        for(Rentals book_in_list: borrowedBooks){
+            return rental.getBook().getBookName().equalsIgnoreCase(bookName);
         }
         return false;
     }
 
-    public void returnBook(Book book){
-        borrowedBooks.remove(book);
+    public void returnBook(Rentals rental){
+        borrowedBooks.remove(rental);
     }
+
+
 }

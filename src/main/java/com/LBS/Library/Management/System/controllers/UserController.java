@@ -2,17 +2,21 @@ package com.LBS.Library.Management.System.controllers;
 
 import com.LBS.Library.Management.System.dtos.BookDto;
 import com.LBS.Library.Management.System.enitites.Book;
+import com.LBS.Library.Management.System.enitites.Rentals;
+import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -21,24 +25,31 @@ public class UserController {
     public List<BookDto> getAllBooks(){
         return userService.getAllBooks();
     }
+
     @GetMapping("/book")
-    public Book getABook(@RequestParam(value = "bookName", required = true) String bookName){
+    public BookDto getABook(@RequestParam(value = "bookName", required = true) String bookName){
         return userService.getABook(bookName);
     }
 
     @GetMapping("/book/author")
-    public List<Book> getByAuthor(@RequestParam(value = "author", required = true)String author){
+    public List<BookDto> getByAuthor(@RequestParam(value = "author", required = true)String author){
         return userService.getByAuthor(author);
     }
 
     @GetMapping("/book/category")
-    public List<Book> getByCategory(@RequestParam(value = "category", required = true) String category){
+    public List<BookDto> getByCategory(@RequestParam(value = "category", required = true) String category){
         return userService.getByCategory(category);
     }
 
     @GetMapping("/viewHistory")
-    public List<Book> viewBorrowedHistory(@RequestParam(value = "email", required = true) String email){
-        return userService.viewBorrowedHistory(email);
+    public List<Rentals> viewBorrowedHistory(@RequestParam(value = "uniqueId", required = true) String uniqueId){
+        return userService.viewBorrowedHistory(uniqueId);
+    }
+    @GetMapping("/profile")
+    public User viewProfile(
+            @RequestParam(value = "uniqueId", required = true) String uniqueId
+    ){
+        return userService.viewProfile(uniqueId);
     }
 
     @PostMapping("/borrowBook")
@@ -56,5 +67,7 @@ public class UserController {
     ){
         return userService.returnBook(email,bookName);
     }
+
+
 }
 

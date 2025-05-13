@@ -1,12 +1,15 @@
 package com.LBS.Library.Management.System.enitites;
 
 import com.LBS.Library.Management.System.AvailabilityStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -23,9 +26,7 @@ public class Book {
     private String author;
     private String category;
     private Integer quantity;
-    @Transient
     private AvailabilityStatus availabilityStatus;
-
 
     public void setStatus(){
         if(quantity > 0 ){
@@ -34,12 +35,5 @@ public class Book {
         else{
             this.availabilityStatus = AvailabilityStatus.NOT_AVAILABLE;
         }
-    }
-    public void setDateGotten(){
-        this.dateBorrowed = LocalDate.now();
-    }
-    public void setDueDate(){
-        String date = dateBorrowed.toString();
-
     }
 }
