@@ -31,8 +31,16 @@ public class UserService {
     }
 
     public List<BookDto> getAllBooks() {
-        return bookRepository.findAll().stream().map(bookMapper::toDto).toList();
+        return bookRepository.findAll().stream().map(book -> {
+            BookDto dto = new BookDto();
+            dto.setBookName(book.getBookName());
+            dto.setAuthor(book.getAuthor());
+            dto.setCategory(book.getCategory());
+            dto.setAvailabilityStatus(book.getAvailabilityStatus());
+            return dto;
+        }).toList();
     }
+
 
     public BookDto getABook(String bookName) {
         Book book = bookRepository.findBybookName(bookName);
