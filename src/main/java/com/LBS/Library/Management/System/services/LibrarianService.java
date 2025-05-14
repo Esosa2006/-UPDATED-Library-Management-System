@@ -71,7 +71,7 @@ public class LibrarianService {
         return ResponseEntity.ok(bookRepository.save(book));
     }
 
-    public ResponseEntity<String> deleteVideo(Long id) {
+    public ResponseEntity<String> deleteBook(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new GlobalRuntimeException("Video not found!"));
         bookRepository.delete(book);
         return ResponseEntity.ok("Book successfully deleted");
@@ -99,5 +99,9 @@ public class LibrarianService {
             book.setStatus();
             bookRepository.save(book);
         }
+    }
+
+    public List<Rentals> viewLibraryRentalHistory() {
+        return rentalRepository.findAll();
     }
 }

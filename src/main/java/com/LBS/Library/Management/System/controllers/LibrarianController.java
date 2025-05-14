@@ -61,7 +61,7 @@ public class LibrarianController {
     public ResponseEntity<String> deleteBook(
             @RequestParam(required = true, value = "id") Long id
     ){
-        return librarianService.deleteVideo(id);
+        return librarianService.deleteBook(id);
     }
     @GetMapping("/book/author")
     public List<Book> getByAuthor(@RequestParam(value = "author", required = true)String author){
@@ -77,4 +77,10 @@ public class LibrarianController {
     public List<Rentals> viewOverdueRentals(){
         return librarianService.viewOverdueRentals();
     }
+
+    @GetMapping("/inventory/rentals")
+    public List<Rentals> viewLibraryRentalsHistory(){
+        return librarianService.viewLibraryRentalHistory();
+    }
 }
+
