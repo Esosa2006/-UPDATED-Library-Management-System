@@ -72,7 +72,7 @@ public class LibrarianService {
     }
 
     public ResponseEntity<String> deleteBook(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new GlobalRuntimeException("Video not found!"));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new GlobalRuntimeException("Book not found!"));
         bookRepository.delete(book);
         return ResponseEntity.ok("Book successfully deleted");
     }
