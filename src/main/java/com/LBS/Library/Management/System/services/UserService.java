@@ -109,12 +109,17 @@ public class UserService {
             throw new GlobalRuntimeException("Book does not exist!");
         }
 
+        if(user.getBorrowedBooks().size() == 5){
+            throw new GlobalRuntimeException("You have reached the limit of borrowed books");
+        }
+
         Rentals rentalToReturn = rentalRepository
                 .findByUserAndBookAndReturnedIsNull(user, book)
                 .orElseThrow(() -> new GlobalRuntimeException("You do not have this book"));
 
         rentalToReturn.setDateReturned();
         book.setQuantity(book.getQuantity() + 1);
+        user.returnBook(rentalToReturn);
         rentalRepository.save(rentalToReturn);
         bookRepository.save(book);
         userRepository.save(user);

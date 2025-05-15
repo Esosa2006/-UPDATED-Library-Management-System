@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class Admin {
-    private String name;
-    private String email;
+    private String name = "admin";
+    private String email = "adminL@gmail.com";
 }
