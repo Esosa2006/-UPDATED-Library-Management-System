@@ -4,10 +4,15 @@ A simple springboot application designed to help manage the operations of a libr
 ## Technologies
 ![Java](https://img.shields.io/badge/Java-17%2B-orange?logo=openjdk&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-3.6%2B-blue?logo=apachemaven&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-2.7.3-green?logo=spring&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13-blue?logo=postgresql&logoColor=white)
+
 
 ## Prerequisites
 - Java 17+
 - Maven
+- Optional - API Client (Postman)
+- Optional - Database Management Tool 
 
 ## Installation
 1. Clone the repository:
