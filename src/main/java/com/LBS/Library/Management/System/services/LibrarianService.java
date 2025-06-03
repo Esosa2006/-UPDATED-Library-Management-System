@@ -9,7 +9,11 @@ import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,15 +42,16 @@ public class LibrarianService {
         return bookRepository.findAllBycategory(category);
     }
 
-    public List<Book> viewAllBooks() {
-        return bookRepository.findAll();
+    public Page<Book> viewAllBooks(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.findAll(pageable);
     }
 
     public Book viewSpecificBook(String bookName) {
         return bookRepository.findBybookName(bookName);
     }
 
-    public void addNewBook(Book book) {
+    public void addNewBook(@Valid Book book) {
         if (bookRepository.existsById(book.getBookID())){
             throw new GlobalRuntimeException("Book already exists in inventory");
         }
@@ -81,7 +86,7 @@ public class LibrarianService {
         return rentalRepository.findByoverdueTrue();
     }
 
-    public ResponseEntity<User> addNewUser(UserRegistrationDto userDto) {
+    public ResponseEntity<User> addNewUser(@Valid UserRegistrationDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
@@ -90,8 +95,9 @@ public class LibrarianService {
         return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user));
     }
 
-    public List<User> viewAllProfiles() {
-        return userRepository.findAll();
+    public Page<User> viewAllProfiles(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable);
     }
 
     public void addSeveralBooks(Book[] listOfBooks) {

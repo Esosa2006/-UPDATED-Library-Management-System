@@ -13,6 +13,9 @@ import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +38,11 @@ public class UserService {
         this.rentalsMapper = rentalsMapper;
     }
 
-    public List<BookDto> getAllBooks() {
-        return bookRepository.findAll().stream().map(bookMapper::toDto).toList();
+    public Page<BookDto> getAllBooks(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.findAll(pageable).map(bookMapper::toDto);
     }
+
 
 
     public BookDto getABook(String bookName) {

@@ -5,7 +5,10 @@ import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.LibrarianService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +26,10 @@ public class LibrarianController {
     }
 
     @GetMapping("/books")
-    public List<Book> viewAllBooks(){return librarianService.viewAllBooks();}
+    public Page<Book> viewAllBooks(@RequestParam (defaultValue = "0") int page,
+                                   @RequestParam (defaultValue = "5") int size){
+        return librarianService.viewAllBooks(page, size);
+    }
 
     @GetMapping("/book")
     public Book viewSpecificBook(@RequestParam(required = true, value = "bookName") String bookName){
@@ -31,21 +37,22 @@ public class LibrarianController {
     }
 
     @GetMapping("/profiles")
-    public List<User> viewAllProfiles(){
-        return librarianService.viewAllProfiles();
+    public Page<User> viewAllProfiles(@RequestParam (defaultValue = "0") int page,
+                                      @RequestParam (defaultValue = "10") int size){
+        return librarianService.viewAllProfiles(page, size);
     }
 
     @PostMapping("/books/add")
-    public void addNewBook(@RequestBody Book book){
+    public void addNewBook(@Valid @RequestBody Book book){
         librarianService.addNewBook(book);
     }
     @PostMapping("/books/addSeveral")
-    public void addSeveralBooks(@RequestBody Book[] list_of_books){
+    public void addSeveralBooks(@Valid @RequestBody Book[] list_of_books){
         librarianService.addSeveralBooks(list_of_books);
     }
 
     @PostMapping("/userRegistration")
-    public ResponseEntity<User> addNewUser(@RequestBody UserRegistrationDto userDto){
+    public ResponseEntity<User> addNewUser(@Valid @RequestBody UserRegistrationDto userDto){
         return librarianService.addNewUser(userDto);
     }
 

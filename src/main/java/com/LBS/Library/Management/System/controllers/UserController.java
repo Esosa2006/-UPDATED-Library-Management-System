@@ -7,6 +7,7 @@ import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,9 @@ public class UserController {
     }
 
     @GetMapping("/books")
-    public List<BookDto> getAllBooks(){
-        return userService.getAllBooks();
+    public Page<BookDto> getAllBooks(@RequestParam (defaultValue = "0") int page,
+                                     @RequestParam (defaultValue = "10") int size){
+        return userService.getAllBooks(page, size);
     }
 
     @GetMapping("/book")
