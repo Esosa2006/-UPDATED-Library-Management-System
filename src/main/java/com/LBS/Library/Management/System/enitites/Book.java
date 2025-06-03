@@ -3,6 +3,8 @@ package com.LBS.Library.Management.System.enitites;
 import com.LBS.Library.Management.System.AvailabilityStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,9 +24,17 @@ public class Book {
     @SequenceGenerator(name = "my_sequence_generator", sequenceName = "my_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence_generator")
     private Long bookID;
+    @NotBlank(message = "Name of the book is required!")
+    @Column(name = "bookName")
     private String bookName;
+    @NotBlank(message = "Author is required!")
+    @Column(name = "author")
     private String author;
+    @NotBlank(message = "Book Genre is required!")
+    @Column(name = "category")
     private String category;
+    @NotBlank(message = "Quantity is required!")
+    @Min(value = 0, message = "Quantity cannot be a negative value!")
     private Integer quantity;
     private AvailabilityStatus availabilityStatus;
 
