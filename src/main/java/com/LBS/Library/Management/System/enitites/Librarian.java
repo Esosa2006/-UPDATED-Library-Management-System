@@ -18,13 +18,14 @@ public class Librarian {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence_generator")
     private Long id;
     @NotBlank(message = "Name is required!")
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
     @Email(message = "Invalid email format detected!")
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
     @NotBlank(message = "Phone number is required!")
     @Size(min = 11, message = "Phone number must be at least 11 numbers!")
+    @Column(name = "phone_number", nullable = false)
     private String phone_number;
     @NotBlank(message = "Passport photograph is required")
     @Column(name = "passport")

@@ -25,17 +25,19 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence_generator")
     private Long bookID;
     @NotBlank(message = "Name of the book is required!")
-    @Column(name = "bookName")
+    @Column(name = "bookName", nullable = false)
     private String bookName;
     @NotBlank(message = "Author is required!")
-    @Column(name = "author")
+    @Column(name = "author", nullable = false)
     private String author;
     @NotBlank(message = "Book Genre is required!")
-    @Column(name = "category")
+    @Column(name = "category", nullable = false)
     private String category;
     @NotBlank(message = "Quantity is required!")
     @Min(value = 0, message = "Quantity cannot be a negative value!")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
+    @Column(name = "availabilityStatus", nullable = false)
     private AvailabilityStatus availabilityStatus;
 
     public void setStatus(){

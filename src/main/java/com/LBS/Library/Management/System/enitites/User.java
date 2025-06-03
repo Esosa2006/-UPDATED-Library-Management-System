@@ -21,9 +21,13 @@ public class User {
     @SequenceGenerator(name = "my_sequence_generator", sequenceName = "my_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence_generator")
     private Long userId;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "uniqueID")
     private String uniqueID;
+    @Column(name = "email", nullable = false)
     private String email;
+    @Column(name = "phone_no", nullable = false)
     private String phone_no;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rentals> borrowedBooks = new ArrayList<>();
