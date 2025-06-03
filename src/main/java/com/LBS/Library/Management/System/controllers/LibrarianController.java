@@ -86,8 +86,9 @@ public class LibrarianController {
     }
 
     @GetMapping("/inventory/rentals")
-    public List<Rentals> viewLibraryRentalsHistory(){
-        return librarianService.viewLibraryRentalHistory();
+    public Page<Rentals> viewLibraryRentalsHistory(@RequestParam (defaultValue = "0") int page,
+                                                   @RequestParam (defaultValue = "10") int size){
+        return librarianService.viewLibraryRentalHistory(page, size);
     }
 }
 

@@ -7,6 +7,11 @@ import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.BookLimitReachedException;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.BookNotFoundException;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.BookSoldOutException;
+import com.LBS.Library.Management.System.exceptions.userExceptions.UserAlreadyHasBookException;
+import com.LBS.Library.Management.System.exceptions.userExceptions.UserNotFoundException;
 import com.LBS.Library.Management.System.mappers.BookMapper;
 import com.LBS.Library.Management.System.mappers.RentalsMapper;
 import com.LBS.Library.Management.System.repositories.BookRepository;
@@ -72,17 +77,17 @@ public class UserService {
         rental.setUser(user);
         rental.setRentalName(book);
         if(user.getEmail() == null){
-            throw new GlobalRuntimeException("User not found!");
+            throw new UserNotFoundException("User not found!");
         }
         if (book.getBookName() == null){
-            throw new GlobalRuntimeException("Book not found!");
+            throw new BookNotFoundException("Book not found!");
         }
         if(book.getAvailabilityStatus() == AvailabilityStatus.NOT_AVAILABLE){
-            throw new GlobalRuntimeException("Sold out!");
+            throw new BookSoldOutException("Sold out!");
         }
 
         if(user.isWithUser(rental)){
-            throw new GlobalRuntimeException("You already have this book");
+            throw new UserAlreadyHasBookException("You already have this book");
         }
         Integer bookQty = book.getQuantity();
         book.setQuantity(bookQty - 1);
@@ -97,7 +102,7 @@ public class UserService {
     public List<RentalsDto> viewBorrowedHistory(String uniqueId) {
         User user = userRepository.findByuniqueID(uniqueId);
         if(user.getEmail() == null) {
-            throw new GlobalRuntimeException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         return user.getBorrowedBooks().stream().map(rentalsMapper::toDto).toList();
     }
@@ -107,15 +112,15 @@ public class UserService {
         Book book = bookRepository.findBybookName(bookName);
 
         if (user == null || user.getName() == null) {
-            throw new GlobalRuntimeException("User does not exist!");
+            throw new UserNotFoundException("User does not exist!");
         }
 
         if (book == null || book.getBookName() == null) {
-            throw new GlobalRuntimeException("Book does not exist!");
+            throw new BookNotFoundException("Book does not exist!");
         }
 
         if(user.getBorrowedBooks().size() == 5){
-            throw new GlobalRuntimeException("You have reached the limit of borrowed books");
+            throw new BookLimitReachedException("You have reached the limit of borrowed books");
         }
 
         Rentals rentalToReturn = rentalRepository
@@ -135,7 +140,7 @@ public class UserService {
     public User viewProfile(String uniqueId) {
         User user = userRepository.findByuniqueID(uniqueId);
         if(user.getEmail() == null){
-            throw new GlobalRuntimeException("User not found!");
+            throw new UserNotFoundException("User not found!");
         }
         return user;
     }

@@ -6,6 +6,8 @@ import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.BookAlreadyExistsException;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.BookNotFoundException;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
@@ -53,14 +55,14 @@ public class LibrarianService {
 
     public void addNewBook(@Valid Book book) {
         if (bookRepository.existsById(book.getBookID())){
-            throw new GlobalRuntimeException("Book already exists in inventory");
+            throw new BookAlreadyExistsException("Book already exists in inventory");
         }
         book.setStatus();
         bookRepository.save(book);
     }
 
     public ResponseEntity<Book> updateBookFields(Long id, Map<String, Object> updates) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new GlobalRuntimeException("Could not find book"));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Could not find book"));
         if(updates.containsKey("bookName")){
             book.setBookName(String.valueOf(updates.get("bookName")));
         }
@@ -77,7 +79,7 @@ public class LibrarianService {
     }
 
     public ResponseEntity<String> deleteBook(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new GlobalRuntimeException("Book not found!"));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Book not found!"));
         bookRepository.delete(book);
         return ResponseEntity.ok("Book successfully deleted");
     }
@@ -107,7 +109,8 @@ public class LibrarianService {
         }
     }
 
-    public List<Rentals> viewLibraryRentalHistory() {
-        return rentalRepository.findAll();
+    public Page<Rentals> viewLibraryRentalHistory(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return rentalRepository.findAll(pageable);
     }
 }
