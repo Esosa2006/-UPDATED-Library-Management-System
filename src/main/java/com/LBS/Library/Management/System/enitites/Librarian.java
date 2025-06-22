@@ -28,7 +28,6 @@ public class Librarian {
     @Column(name = "phone_number", nullable = false)
     private String phone_number;
     @NotBlank(message = "Passport photograph is required")
-    @Column(name = "passport")
     @OneToOne
     @JoinColumn(name = "imageId")
     private ImageData passport;

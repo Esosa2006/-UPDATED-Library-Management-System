@@ -1,5 +1,6 @@
 package com.LBS.Library.Management.System.controllers;
 
+import com.LBS.Library.Management.System.dtos.BookRegistrationDto;
 import com.LBS.Library.Management.System.dtos.UserRegistrationDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rentals;
@@ -8,11 +9,9 @@ import com.LBS.Library.Management.System.services.LibrarianService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public class LibrarianController {
     }
 
     @GetMapping("/book")
-    public Book viewSpecificBook(@RequestParam(required = true, value = "bookName") String bookName){
+    public ResponseEntity<Book> viewSpecificBook(@RequestParam(required = true, value = "bookName") String bookName){
         return librarianService.viewSpecificBook(bookName);
     }
 
@@ -43,8 +42,8 @@ public class LibrarianController {
     }
 
     @PostMapping("/books/add")
-    public void addNewBook(@Valid @RequestBody Book book){
-        librarianService.addNewBook(book);
+    public void addNewBook(@Valid @RequestBody BookRegistrationDto bookRegistrationDto){
+        librarianService.addNewBook(bookRegistrationDto);
     }
     @PostMapping("/books/addSeveral")
     public void addSeveralBooks(@Valid @RequestBody Book[] list_of_books){

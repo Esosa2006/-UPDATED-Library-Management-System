@@ -1,9 +1,7 @@
 package com.LBS.Library.Management.System.controllers;
 
-import com.LBS.Library.Management.System.dtos.BookDto;
+import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.dtos.RentalsDto;
-import com.LBS.Library.Management.System.enitites.Book;
-import com.LBS.Library.Management.System.enitites.Rentals;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +22,23 @@ public class UserController {
     }
 
     @GetMapping("/books")
-    public Page<BookDto> getAllBooks(@RequestParam (defaultValue = "0") int page,
-                                     @RequestParam (defaultValue = "10") int size){
+    public Page<UserViewBookDto> getAllBooks(@RequestParam (defaultValue = "0") int page,
+                                             @RequestParam (defaultValue = "10") int size){
         return userService.getAllBooks(page, size);
     }
 
     @GetMapping("/book")
-    public BookDto getABook(@RequestParam(value = "bookName", required = true) String bookName){
+    public UserViewBookDto getABook(@RequestParam(value = "bookName", required = true) String bookName){
         return userService.getABook(bookName);
     }
 
     @GetMapping("/book/author")
-    public List<BookDto> getByAuthor(@RequestParam(value = "author", required = true)String author){
+    public List<UserViewBookDto> getByAuthor(@RequestParam(value = "author", required = true)String author){
         return userService.getByAuthor(author);
     }
 
     @GetMapping("/book/category")
-    public List<BookDto> getByCategory(@RequestParam(value = "category", required = true) String category){
+    public List<UserViewBookDto> getByCategory(@RequestParam(value = "category", required = true) String category){
         return userService.getByCategory(category);
     }
 

@@ -3,6 +3,7 @@ package com.LBS.Library.Management.System.enitites;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -17,38 +18,15 @@ public class Rentals {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
+    @ToString.Exclude
     private User user;
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @ToString.Exclude
     private Book book;
     private String rentalName;
     private LocalDate dateBorrowed;
     private LocalDate dueDate;
     private LocalDate returned;
     private boolean overdue;
-
-    public void setDateGotten(){
-        this.dateBorrowed = LocalDate.now();
-        this.dueDate = dateBorrowed.plusWeeks(4);
-    }
-
-    public void setDateReturned(){
-        this.returned = LocalDate.now();
-    }
-
-    public void setRentalName(Book book){
-        this.rentalName = book.getBookName();
-    }
-    public void updateOverdue(){
-        if(returned == null && LocalDate.now().isAfter(dueDate)){
-            overdue = true;
-        }
-    }
-
-    @PreUpdate
-    @PrePersist
-    public void updateOverdueStatus() {
-        updateOverdue();
-    }
-
 }

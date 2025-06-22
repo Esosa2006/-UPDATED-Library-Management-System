@@ -40,6 +40,7 @@ public class User {
         this.uniqueID = part_of_name + randomNum;
     }
 
+
     public void storeBorrowedBook(Rentals rental){
         String rentalName = rental.getBook().getBookName();
         if(borrowedBooks.isEmpty() || (!borrowedBooks.contains(rental))){

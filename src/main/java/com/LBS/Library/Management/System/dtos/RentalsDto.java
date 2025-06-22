@@ -1,6 +1,5 @@
 package com.LBS.Library.Management.System.dtos;
 
-import com.LBS.Library.Management.System.enitites.Book;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +11,4 @@ public class RentalsDto {
     private String rentalName;
     private LocalDate dateBorrowed;
     private LocalDate dueDate;
-
-
 }

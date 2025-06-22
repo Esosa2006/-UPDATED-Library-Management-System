@@ -5,9 +5,9 @@ import lombok.*;
 
 @NoArgsConstructor
 @Data
-public class BookDto {
+public class UserViewBookDto {
     private String bookName;
     private String author;
     private String category;
-    private AvailabilityStatus availabilityStatus;
+    private AvailabilityStatus status;
 }
