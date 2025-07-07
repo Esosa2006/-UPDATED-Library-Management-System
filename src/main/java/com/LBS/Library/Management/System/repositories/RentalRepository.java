@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface RentalRepository extends JpaRepository<Rental, Long> {
-        List<Rental> findAllByOverdueIsTrue();
+    List<Rental> findAllByOverdueIsTrue();
     Optional<Rental> findByUserAndBookAndReturnedIsNull(User user, Book book);
 
 }

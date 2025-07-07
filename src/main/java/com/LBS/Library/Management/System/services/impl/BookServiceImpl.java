@@ -1,6 +1,8 @@
 package com.LBS.Library.Management.System.services.impl;
 
+import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.enitites.Book;
+import com.LBS.Library.Management.System.mappers.BookMapper;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +17,23 @@ import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
+    private final BookMapper bookMapper;
     private final BookRepository bookRepository;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookMapper bookMapper, BookRepository bookRepository) {
+        this.bookMapper = bookMapper;
         this.bookRepository = bookRepository;
     }
 
     @Override
-    public List<Book> getByAuthor(String author) {
-        return bookRepository.findAllByauthor(author);
+    public List<UserViewBookDto> getByAuthor(String author) {
+        return bookRepository.findAllByauthor(author).stream().map(bookMapper::toDto).toList();
     }
 
     @Override
-    public List<Book> getByCategory(String category) {
-        return bookRepository.findAllBycategory(category);
+    public List<UserViewBookDto> getByCategory(String category) {
+        return bookRepository.findAllBycategory(category).stream().map(bookMapper::toDto).toList();
     }
 
     @Override
@@ -39,7 +43,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public ResponseEntity<Book> viewSpecificBook(String bookName) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookRepository.findBybookName(bookName));
+    public ResponseEntity<UserViewBookDto> viewSpecificBook(String bookName) {
+        Book book = bookRepository.findBybookName(bookName);
+        return ResponseEntity.status(HttpStatus.OK).body(bookMapper.toDto(book));
     }
 }
