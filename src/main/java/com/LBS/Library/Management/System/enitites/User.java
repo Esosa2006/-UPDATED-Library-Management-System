@@ -1,5 +1,6 @@
 package com.LBS.Library.Management.System.enitites;
 
+import com.LBS.Library.Management.System.enums.Role;
 import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,8 @@ public class User {
     private List<Rental> borrowedBooks = new ArrayList<>();
     @Column(name = "password")
     private String password;
+    @Column(name = "role")
+    private Role role;
 
 
     public void setUniqueID(){

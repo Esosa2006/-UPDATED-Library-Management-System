@@ -6,16 +6,20 @@ import com.LBS.Library.Management.System.dtos.UserRegistrationDto;
 import com.LBS.Library.Management.System.enitites.ImageData;
 import com.LBS.Library.Management.System.enitites.Librarian;
 import com.LBS.Library.Management.System.enitites.User;
+import com.LBS.Library.Management.System.enums.Role;
+import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import com.LBS.Library.Management.System.exceptions.userExceptions.UserAlreadyExistsException;
 import com.LBS.Library.Management.System.repositories.LibrarianPassportRepository;
 import com.LBS.Library.Management.System.repositories.LibrarianRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
 import com.LBS.Library.Management.System.services.AuthService;
-import com.LBS.Library.Management.System.services.LibrarianService;
 import com.LBS.Library.Management.System.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
@@ -24,12 +28,14 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final LibrarianRepository librarianRepository;
     private final LibrarianPassportRepository librarianPassportRepository;
+    private final AuthenticationManager authManager;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, LibrarianRepository librarianRepository, LibrarianPassportRepository librarianPassportRepository) {
+    public AuthServiceImpl(UserRepository userRepository, LibrarianRepository librarianRepository, LibrarianPassportRepository librarianPassportRepository, AuthenticationManager authManager) {
         this.userRepository = userRepository;
         this.librarianRepository = librarianRepository;
         this.librarianPassportRepository = librarianPassportRepository;
+        this.authManager = authManager;
     }
 
     @Override
@@ -43,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
         newUser.setName(userRegistrationDto.getName());
         newUser.setEmail(userRegistrationDto.getEmail());
         newUser.setPhone_no(userRegistrationDto.getEmail());
+        newUser.setRole(Role.CUSTOMER);
         newUser.setPassword(encoder.encode(userRegistrationDto.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(newUser));
     }
@@ -64,13 +71,20 @@ public class AuthServiceImpl implements AuthService {
         newLibrarian.setEmail(librarianRegistrationDto.getEmail());
         newLibrarian.setPhone_number(librarianRegistrationDto.getPhoneNumber());
         newLibrarian.setPassword(encoder.encode(librarianRegistrationDto.getPassword()));
+        newLibrarian.setRole(Role.LIBRARIAN);
         newLibrarian.setPassportPhoto(imageData);
+        librarianPassportRepository.save(imageData);
         return ResponseEntity.status(HttpStatus.CREATED).body(librarianRepository.save(newLibrarian));
     }
 
 
     @Override
     public ResponseEntity<Object> login(LoginDto loginDto) {
-        return null;
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        if (!authentication.isAuthenticated()){
+            throw new GlobalRuntimeException("Authentication Failed!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body()
+
     }
 }

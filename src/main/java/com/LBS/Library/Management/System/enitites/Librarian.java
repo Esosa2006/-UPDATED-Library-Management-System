@@ -1,5 +1,6 @@
 package com.LBS.Library.Management.System.enitites;
 
+import com.LBS.Library.Management.System.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -29,7 +30,8 @@ public class Librarian {
     private ImageData passport;
     @Column(name = "password")
     private String password;
-
+    @Column(name = "role")
+    private Role role;
 
     public void setPassportPhoto(ImageData passport){
         passport.setLibrarian(this);
