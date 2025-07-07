@@ -30,7 +30,8 @@ public class User {
     private String phone_no;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> borrowedBooks = new ArrayList<>();
-
+    @Column(name = "password")
+    private String password;
 
 
     public void setUniqueID(){
