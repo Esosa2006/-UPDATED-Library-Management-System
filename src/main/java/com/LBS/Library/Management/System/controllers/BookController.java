@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/api/v1/books")
 public class BookController {
     private final BookService bookService;
 
@@ -27,7 +27,7 @@ public class BookController {
         return bookService.viewSpecificBook(bookName);
     }
 
-    @GetMapping("/books")
+    @GetMapping("/All")
     public Page<Book> viewAllBooks(@RequestParam (defaultValue = "0") int page,
                                    @RequestParam (defaultValue = "5") int size){
         return bookService.viewAllBooks(page, size);

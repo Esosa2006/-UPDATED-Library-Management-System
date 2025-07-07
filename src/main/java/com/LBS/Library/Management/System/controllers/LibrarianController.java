@@ -39,11 +39,6 @@ public class LibrarianController {
         librarianService.addSeveralBooks(list_of_books);
     }
 
-    @PostMapping("/userRegistration")
-    public ResponseEntity<User> addNewUser(@Valid @RequestBody UserRegistrationDto userDto){
-        return librarianService.addNewUser(userDto);
-    }
-
     @PatchMapping("/books/update")
     public ResponseEntity<Book> updateBookFields(
             @RequestParam(required = true, value = "id") Long id,

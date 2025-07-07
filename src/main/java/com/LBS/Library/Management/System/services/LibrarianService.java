@@ -16,8 +16,6 @@ public interface LibrarianService{
 
     ResponseEntity<String> deleteBook(Long id);
 
-    ResponseEntity<User> addNewUser(UserRegistrationDto userDto);
-
     Page<User> viewAllProfiles(int page, int size);
 
     void addSeveralBooks(Book[] listOfBooks);

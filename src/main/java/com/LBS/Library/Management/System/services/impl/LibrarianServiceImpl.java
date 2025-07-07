@@ -77,16 +77,6 @@ public class LibrarianServiceImpl implements LibrarianService {
     }
 
     @Override
-    public ResponseEntity<User> addNewUser(UserRegistrationDto userDto) {
-        User user = new User();
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setPhone_no(userDto.getPhone_no());
-        user.setUniqueID();
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user));
-    }
-
-    @Override
     public Page<User> viewAllProfiles(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return userRepository.findAll(pageable);

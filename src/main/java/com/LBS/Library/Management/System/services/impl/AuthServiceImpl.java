@@ -12,6 +12,7 @@ import com.LBS.Library.Management.System.exceptions.userExceptions.UserAlreadyEx
 import com.LBS.Library.Management.System.repositories.LibrarianPassportRepository;
 import com.LBS.Library.Management.System.repositories.LibrarianRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
+import com.LBS.Library.Management.System.security.JWTService;
 import com.LBS.Library.Management.System.services.AuthService;
 import com.LBS.Library.Management.System.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,15 @@ public class AuthServiceImpl implements AuthService {
     private final LibrarianRepository librarianRepository;
     private final LibrarianPassportRepository librarianPassportRepository;
     private final AuthenticationManager authManager;
+    private final JWTService jwtService;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, LibrarianRepository librarianRepository, LibrarianPassportRepository librarianPassportRepository, AuthenticationManager authManager) {
+    public AuthServiceImpl(UserRepository userRepository, LibrarianRepository librarianRepository, LibrarianPassportRepository librarianPassportRepository, AuthenticationManager authManager, JWTService jwtService) {
         this.userRepository = userRepository;
         this.librarianRepository = librarianRepository;
         this.librarianPassportRepository = librarianPassportRepository;
         this.authManager = authManager;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
         if (!authentication.isAuthenticated()){
             throw new GlobalRuntimeException("Authentication Failed!");
         }
-        return ResponseEntity.status(HttpStatus.OK).body()
+        return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken(loginDto.getEmail()));
 
     }
 }

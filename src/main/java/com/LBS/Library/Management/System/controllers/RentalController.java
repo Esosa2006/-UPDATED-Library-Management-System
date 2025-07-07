@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/api/v1/rental")
 public class RentalController {
     private final RentalsService rentalsService;
 
@@ -21,12 +21,12 @@ public class RentalController {
         this.rentalsService = rentalsService;
     }
 
-    @GetMapping("/book/overdue")
+    @GetMapping("/overdue")
     public List<Rental> viewOverdueRentals(){
         return rentalsService.viewOverdueRentals();
     }
 
-    @GetMapping("/inventory/rentals")
+    @GetMapping("/history")
     public Page<Rental> viewLibraryRentalsHistory(@RequestParam(defaultValue = "0") int page,
                                                   @RequestParam (defaultValue = "10") int size){
         return rentalsService.viewLibraryRentalHistory(page, size);
