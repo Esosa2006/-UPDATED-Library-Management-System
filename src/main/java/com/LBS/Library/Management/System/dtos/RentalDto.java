@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @Data
-public class RentalsDto {
+public class RentalDto {
     private String rentalName;
     private LocalDate dateBorrowed;
     private LocalDate dueDate;

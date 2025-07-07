@@ -2,11 +2,9 @@ package com.LBS.Library.Management.System.enitites;
 
 import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,9 @@ public class User {
     @Column(name = "phone_no", nullable = false)
     private String phone_no;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rentals> borrowedBooks = new ArrayList<>();
+    private List<Rental> borrowedBooks = new ArrayList<>();
+
+
 
     public void setUniqueID(){
         Random rand = new Random();
@@ -41,7 +41,7 @@ public class User {
     }
 
 
-    public void storeBorrowedBook(Rentals rental){
+    public void storeBorrowedBook(Rental rental){
         String rentalName = rental.getBook().getBookName();
         if(borrowedBooks.isEmpty() || (!borrowedBooks.contains(rental))){
             borrowedBooks.add(rental);
@@ -50,10 +50,10 @@ public class User {
             throw new GlobalRuntimeException("You already have this book");
         }
     }
-    public boolean isWithUser(Rentals rental) {
+    public boolean isWithUser(Rental rental) {
         Book incomingBook = rental.getBook();
 
-        for (Rentals r : borrowedBooks) {
+        for (Rental r : borrowedBooks) {
             Book borrowedBook = r.getBook();
             if (borrowedBook.getBookID().equals(incomingBook.getBookID()) && r.getReturned() == null) {
                 return true;
@@ -64,7 +64,7 @@ public class User {
     }
 
 
-    public void returnBook(Rentals rental){
+    public void returnBook(Rental rental){
         borrowedBooks.remove(rental);
     }
 

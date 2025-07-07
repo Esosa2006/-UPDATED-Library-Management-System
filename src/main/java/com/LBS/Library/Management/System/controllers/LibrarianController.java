@@ -3,7 +3,7 @@ package com.LBS.Library.Management.System.controllers;
 import com.LBS.Library.Management.System.dtos.BookRegistrationDto;
 import com.LBS.Library.Management.System.dtos.UserRegistrationDto;
 import com.LBS.Library.Management.System.enitites.Book;
-import com.LBS.Library.Management.System.enitites.Rentals;
+import com.LBS.Library.Management.System.enitites.Rental;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.LibrarianService;
 import jakarta.validation.Valid;
@@ -22,17 +22,6 @@ public class LibrarianController {
     @Autowired
     public LibrarianController(LibrarianService librarianService) {
         this.librarianService = librarianService;
-    }
-
-    @GetMapping("/books")
-    public Page<Book> viewAllBooks(@RequestParam (defaultValue = "0") int page,
-                                   @RequestParam (defaultValue = "5") int size){
-        return librarianService.viewAllBooks(page, size);
-    }
-
-    @GetMapping("/book")
-    public ResponseEntity<Book> viewSpecificBook(@RequestParam(required = true, value = "bookName") String bookName){
-        return librarianService.viewSpecificBook(bookName);
     }
 
     @GetMapping("/profiles")
@@ -68,26 +57,6 @@ public class LibrarianController {
             @RequestParam(required = true, value = "id") Long id
     ){
         return librarianService.deleteBook(id);
-    }
-    @GetMapping("/book/author")
-    public List<Book> getByAuthor(@RequestParam(value = "author", required = true)String author){
-        return librarianService.getByAuthor(author);
-    }
-
-    @GetMapping("/book/category")
-    public List<Book> getByCategory(@RequestParam(value = "category", required = true) String category){
-        return librarianService.getByCategory(category);
-    }
-
-    @GetMapping("/book/overdue")
-    public List<Rentals> viewOverdueRentals(){
-        return librarianService.viewOverdueRentals();
-    }
-
-    @GetMapping("/inventory/rentals")
-    public Page<Rentals> viewLibraryRentalsHistory(@RequestParam (defaultValue = "0") int page,
-                                                   @RequestParam (defaultValue = "10") int size){
-        return librarianService.viewLibraryRentalHistory(page, size);
     }
 }
 

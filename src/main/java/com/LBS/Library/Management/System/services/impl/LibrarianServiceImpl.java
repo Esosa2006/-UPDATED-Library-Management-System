@@ -3,7 +3,7 @@ package com.LBS.Library.Management.System.services.impl;
 import com.LBS.Library.Management.System.dtos.BookRegistrationDto;
 import com.LBS.Library.Management.System.dtos.UserRegistrationDto;
 import com.LBS.Library.Management.System.enitites.Book;
-import com.LBS.Library.Management.System.enitites.Rentals;
+import com.LBS.Library.Management.System.enitites.Rental;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.exceptions.bookExceptions.BookAlreadyExistsException;
 import com.LBS.Library.Management.System.exceptions.bookExceptions.BookNotFoundException;
@@ -35,27 +35,6 @@ public class LibrarianServiceImpl implements LibrarianService {
         this.bookRepository = bookRepository;
         this.rentalRepository = rentalRepository;
         this.userRepository = userRepository;
-    }
-
-    @Override
-    public List<Book> getByAuthor(String author) {
-        return bookRepository.findAllByauthor(author);
-    }
-
-    @Override
-    public List<Book> getByCategory(String category) {
-        return bookRepository.findAllBycategory(category);
-    }
-
-    @Override
-    public Page<Book> viewAllBooks(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return bookRepository.findAll(pageable);
-    }
-
-    @Override
-    public ResponseEntity<Book> viewSpecificBook(String bookName) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookRepository.findBybookName(bookName));
     }
 
     @Override
@@ -98,22 +77,6 @@ public class LibrarianServiceImpl implements LibrarianService {
     }
 
     @Override
-    public List<Rentals> viewOverdueRentals() {
-        List<Rentals> overDueRentals = new ArrayList<>();
-        List<Rentals> allRentals = rentalRepository.findAll().stream().toList();
-        for (Rentals rentals: allRentals) {
-            LocalDate dueDate = rentals.getDueDate();
-            boolean overdue = dueDate.isAfter(LocalDate.now());
-            if (overdue) {
-                rentals.setOverdue(true);
-                rentalRepository.save(rentals);
-                overDueRentals.add(rentals);
-            }
-        }
-        return overDueRentals;
-    }
-
-    @Override
     public ResponseEntity<User> addNewUser(UserRegistrationDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
@@ -135,11 +98,5 @@ public class LibrarianServiceImpl implements LibrarianService {
             book.setStatus();
             bookRepository.save(book);
         }
-    }
-
-    @Override
-    public Page<Rentals> viewLibraryRentalHistory(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return rentalRepository.findAll(pageable);
     }
 }

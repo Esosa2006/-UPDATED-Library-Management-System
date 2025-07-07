@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Table
 @Entity
 @Data
-public class Rentals {
+public class Rental {
     @Id
     @SequenceGenerator(name = "rental_seq", sequenceName = "rental_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rental_seq")

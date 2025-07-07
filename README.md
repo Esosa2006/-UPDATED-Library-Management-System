@@ -28,7 +28,7 @@ A simple springboot application designed to help manage the operations of a libr
 ## Usage
 You’ll probably need to open the main and try running a few things. It supports:
 - Renting of books
-- Returning rentals
+- Returning rental
 - Adding new books
 - Editing existing book details
 - Removing books

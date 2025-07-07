@@ -1,7 +1,7 @@
 package com.LBS.Library.Management.System.controllers;
 
 import com.LBS.Library.Management.System.dtos.UserViewBookDto;
-import com.LBS.Library.Management.System.dtos.RentalsDto;
+import com.LBS.Library.Management.System.dtos.RentalDto;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +21,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/books")
-    public Page<UserViewBookDto> getAllBooks(@RequestParam (defaultValue = "0") int page,
-                                             @RequestParam (defaultValue = "10") int size){
-        return userService.getAllBooks(page, size);
-    }
-
-    @GetMapping("/book")
-    public UserViewBookDto getABook(@RequestParam(value = "bookName", required = true) String bookName){
-        return userService.getABook(bookName);
-    }
-
-    @GetMapping("/book/author")
-    public List<UserViewBookDto> getByAuthor(@RequestParam(value = "author", required = true)String author){
-        return userService.getByAuthor(author);
-    }
-
-    @GetMapping("/book/category")
-    public List<UserViewBookDto> getByCategory(@RequestParam(value = "category", required = true) String category){
-        return userService.getByCategory(category);
-    }
-
     @GetMapping("/viewHistory")
-    public List<RentalsDto> viewBorrowedHistory(@RequestParam(value = "uniqueId", required = true) String uniqueId){
+    public List<RentalDto> viewBorrowedHistory(@RequestParam(value = "uniqueId", required = true) String uniqueId){
         return userService.viewBorrowedHistory(uniqueId);
     }
     @GetMapping("/profile")

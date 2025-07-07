@@ -1,10 +1,10 @@
 package com.LBS.Library.Management.System.services.impl;
 
 import com.LBS.Library.Management.System.AvailabilityStatus;
-import com.LBS.Library.Management.System.dtos.RentalsDto;
+import com.LBS.Library.Management.System.dtos.RentalDto;
 import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.enitites.Book;
-import com.LBS.Library.Management.System.enitites.Rentals;
+import com.LBS.Library.Management.System.enitites.Rental;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.exceptions.GlobalRuntimeException;
 import com.LBS.Library.Management.System.exceptions.bookExceptions.BookLimitReachedException;
@@ -46,32 +46,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserViewBookDto> getAllBooks(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return bookRepository.findAll(pageable).map(bookMapper::toDto);
-    }
-
-    @Override
-    public UserViewBookDto getABook(String bookName) {
-        Book book = bookRepository.findBybookName(bookName);
-        return bookMapper.toDto(book);
-    }
-
-    @Override
-    public List<UserViewBookDto> getByAuthor(String author) {
-        return bookRepository.findAllByauthor(author).stream().map(bookMapper::toDto).toList();
-    }
-
-    @Override
-    public List<UserViewBookDto> getByCategory(String category) {
-        return bookRepository.findAllBycategory(category).stream().map(bookMapper::toDto).toList();
-    }
-
-    @Override
     public ResponseEntity<String> borrowBook(String email, String bookName) {
         User user = userRepository.findByemail(email);
         Book book = bookRepository.findBybookName(bookName);
-        Rentals rental = new Rentals();
+        Rental rental = new Rental();
         rental.setDateBorrowed(LocalDate.now().minusDays(1));
         rental.setDueDate(LocalDate.now());
         rental.setBook(book);
@@ -101,7 +79,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<RentalsDto> viewBorrowedHistory(String uniqueId) {
+    public List<RentalDto> viewBorrowedHistory(String uniqueId) {
         User user = userRepository.findByuniqueID(uniqueId);
         if(user.getEmail() == null) {
             throw new UserNotFoundException("User not found");
@@ -126,7 +104,7 @@ public class UserServiceImpl implements UserService {
             throw new BookLimitReachedException("You have reached the limit of borrowed books");
         }
 
-        Rentals rentalToReturn = rentalRepository
+        Rental rentalToReturn = rentalRepository
                 .findByUserAndBookAndReturnedIsNull(user, book)
                 .orElseThrow(() -> new GlobalRuntimeException("You do not have this book"));
 
