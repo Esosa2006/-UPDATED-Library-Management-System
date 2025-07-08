@@ -11,6 +11,7 @@ import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
 import com.LBS.Library.Management.System.services.LibrarianService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +32,7 @@ public class LibrarianServiceImpl implements LibrarianService {
     }
 
     @Override
-    public void addNewBook(BookRegistrationDto bookRegistrationDto) {
+    public void addNewBook(@Valid BookRegistrationDto bookRegistrationDto) {
         Book book = new Book();
         book.setBookName(bookRegistrationDto.getBookName());
         book.setAuthor(bookRegistrationDto.getAuthor());
@@ -76,7 +77,7 @@ public class LibrarianServiceImpl implements LibrarianService {
     }
 
     @Override
-    public void addSeveralBooks(Book[] listOfBooks) {
+    public void addSeveralBooks(@Valid Book[] listOfBooks) {
         for (Book book : listOfBooks) {
             book.setStatus();
             bookRepository.save(book);
