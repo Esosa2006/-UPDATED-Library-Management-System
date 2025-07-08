@@ -1,7 +1,9 @@
 package com.LBS.Library.Management.System.controllers;
 
+import com.LBS.Library.Management.System.dtos.BookNameRequest;
 import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.dtos.RentalDto;
+import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,9 @@ public class UserController {
     @PostMapping("/borrowBook")
     public ResponseEntity<String> borrowBook(
             Authentication authentication,
-            @RequestBody String bookName
+            @RequestBody BookNameRequest bookNameRequest
             ) {
+        String bookName = bookNameRequest.getName();
         String email = authentication.getName();
         return userService.borrowBook(email, bookName);
     }
@@ -45,8 +48,9 @@ public class UserController {
     @PostMapping("/returnBook")
     public ResponseEntity<String> returnBook(
             Authentication authentication,
-            @RequestBody String bookName
-    ){
+            @RequestBody BookNameRequest bookNameRequest
+            ){
+        String bookName = bookNameRequest.getName();
         String email = authentication.getName();
         return userService.returnBook(email,bookName);
     }

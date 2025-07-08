@@ -30,6 +30,12 @@ public class JWTFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         String token = null;
         String username = null;
+        String path = request.getServletPath();
+
+        if (path.startsWith("/api/v1/auth") || path.startsWith("/api/v1/books")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (header != null && header.startsWith("Bearer ")){
             token = header.substring(7);
@@ -41,9 +47,11 @@ public class JWTFilter extends OncePerRequestFilter {
             if (jwtService.validate(token, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("Authorities: " + userDetails.getAuthorities());
+                System.out.println("JWT valid: " + jwtService.validate(token, userDetails));
             }
         }
         filterChain.doFilter(request, response);

@@ -4,7 +4,6 @@ import com.LBS.Library.Management.System.util.SecretKeyGenerator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +17,12 @@ import java.util.Map;
 public class JWTService {
     public final String secretKey = SecretKeyGenerator.generateSecretKey();
 
-    public String generateToken(@NotBlank(message = "Email is required!") String email) {
-        Map<String, Object> Claims = new HashMap<>();
+    public String generateToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder()
                 .claims()
-                .add(Claims)
+                .add(claims)
                 .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() * 36000))

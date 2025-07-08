@@ -38,7 +38,7 @@ public class LibrarianServiceImpl implements LibrarianService {
         book.setAuthor(bookRegistrationDto.getAuthor());
         book.setCategory(bookRegistrationDto.getCategory());
         book.setQuantity(bookRegistrationDto.getQuantity());
-        if (bookRepository.existsById(book.getBookID())){
+        if (bookRepository.findBybookName(bookRegistrationDto.getBookName()) != null){
             throw new BookAlreadyExistsException("Book already exists in inventory");
         }
         book.setStatus();

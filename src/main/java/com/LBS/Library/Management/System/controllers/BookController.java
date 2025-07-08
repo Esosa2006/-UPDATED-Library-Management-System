@@ -1,5 +1,6 @@
 package com.LBS.Library.Management.System.controllers;
 
+import com.LBS.Library.Management.System.dtos.BookNameRequest;
 import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.services.BookService;
@@ -21,7 +22,8 @@ public class BookController {
     }
 
     @GetMapping("/book")
-    public ResponseEntity<UserViewBookDto> viewSpecificBook(@RequestBody String bookName){
+    public ResponseEntity<UserViewBookDto> viewSpecificBook(@RequestBody BookNameRequest bookNameRequest){
+        String bookName = bookNameRequest.getName();
         return bookService.viewSpecificBook(bookName);
     }
 
@@ -32,12 +34,14 @@ public class BookController {
     }
 
     @GetMapping("/book/author")
-    public List<UserViewBookDto> getByAuthor(@RequestBody String author){
+    public List<UserViewBookDto> getByAuthor(@RequestBody BookNameRequest bookNameRequest){
+        String author = bookNameRequest.getName();
         return bookService.getByAuthor(author);
     }
 
     @GetMapping("/book/category")
-    public List<UserViewBookDto> getByCategory(@RequestBody String category){
+    public List<UserViewBookDto> getByCategory(@RequestBody BookNameRequest bookNameRequest){
+        String category = bookNameRequest.getName();
         return bookService.getByCategory(category);
     }
 }
