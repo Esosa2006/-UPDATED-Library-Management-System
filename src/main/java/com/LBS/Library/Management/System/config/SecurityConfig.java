@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/**", "api/v1/books/**").permitAll()
                         .requestMatchers("/api/v1/librarian/**", "/api/v1/rental/**").hasAnyRole("LIBRARIAN", "ADMIN")
-                        .requestMatchers("/api/v1/user/**").hasRole("USER")
+                        .requestMatchers("/api/v1/user/**").hasRole("CUSTOMER")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
