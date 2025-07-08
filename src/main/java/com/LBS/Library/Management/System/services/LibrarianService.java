@@ -1,7 +1,6 @@
 package com.LBS.Library.Management.System.services;
 
 import com.LBS.Library.Management.System.dtos.BookRegistrationDto;
-import com.LBS.Library.Management.System.dtos.UserRegistrationDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.User;
 import org.springframework.data.domain.Page;

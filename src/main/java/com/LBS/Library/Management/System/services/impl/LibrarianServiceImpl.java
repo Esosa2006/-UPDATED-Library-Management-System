@@ -32,7 +32,7 @@ public class LibrarianServiceImpl implements LibrarianService {
     }
 
     @Override
-    public void addNewBook(@Valid BookRegistrationDto bookRegistrationDto) {
+    public void addNewBook(BookRegistrationDto bookRegistrationDto) {
         Book book = new Book();
         book.setBookName(bookRegistrationDto.getBookName());
         book.setAuthor(bookRegistrationDto.getAuthor());
@@ -77,7 +77,7 @@ public class LibrarianServiceImpl implements LibrarianService {
     }
 
     @Override
-    public void addSeveralBooks(@Valid Book[] listOfBooks) {
+    public void addSeveralBooks(Book[] listOfBooks) {
         for (Book book : listOfBooks) {
             book.setStatus();
             bookRepository.save(book);
