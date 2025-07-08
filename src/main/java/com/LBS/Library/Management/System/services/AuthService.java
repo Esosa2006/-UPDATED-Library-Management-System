@@ -10,7 +10,7 @@ import java.io.IOException;
 public interface AuthService {
     ResponseEntity<Object> register(UserRegistrationDto userRegistrationDto);
 
-    ResponseEntity<Object> registerLibrarian(LibrarianRegistrationDto librarianRegistrationDto)  throws IOException;
+    ResponseEntity<Object> registerLibrarian(LibrarianRegistrationDto librarianRegistrationDto);
 
     ResponseEntity<Object> login(LoginDto loginDto);
 }

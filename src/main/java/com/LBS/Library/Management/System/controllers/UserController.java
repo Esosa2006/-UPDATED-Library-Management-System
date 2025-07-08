@@ -7,6 +7,7 @@ import com.LBS.Library.Management.System.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,29 +23,31 @@ public class UserController {
     }
 
     @GetMapping("/viewHistory")
-    public List<RentalDto> viewBorrowedHistory(@RequestParam(value = "uniqueId", required = true) String uniqueId){
-        return userService.viewBorrowedHistory(uniqueId);
+    public List<RentalDto> viewBorrowedHistory(Authentication authentication){
+        String email = authentication.getName();
+        return userService.viewBorrowedHistory(email);
     }
     @GetMapping("/profile")
-    public User viewProfile(
-            @RequestParam(value = "uniqueId", required = true) String uniqueId
-    ){
-        return userService.viewProfile(uniqueId);
+    public User viewProfile(Authentication authentication){
+        String email = authentication.getName();
+        return userService.viewProfile(email);
     }
 
     @PostMapping("/borrowBook")
     public ResponseEntity<String> borrowBook(
-            @RequestParam(value = "email", required = true) String email,
-            @RequestParam(value = "bookName", required = true) String bookName
+            Authentication authentication,
+            @RequestBody String bookName
             ) {
+        String email = authentication.getName();
         return userService.borrowBook(email, bookName);
     }
 
     @PostMapping("/returnBook")
     public ResponseEntity<String> returnBook(
-            @RequestParam(value = "email", required = true) String email,
-            @RequestParam(value = "bookName", required = true) String bookName
+            Authentication authentication,
+            @RequestBody String bookName
     ){
+        String email = authentication.getName();
         return userService.returnBook(email,bookName);
     }
 

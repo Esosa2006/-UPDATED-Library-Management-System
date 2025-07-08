@@ -17,7 +17,7 @@ public class LibrarianRegistrationDto {
     @Size(min = 11, max = 11, message = "Phone number should be 11 numbers")
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
-    private MultipartFile passport;
+//    private MultipartFile passport;
     @NotBlank(message = "Password is required!")
     private String password;
 }

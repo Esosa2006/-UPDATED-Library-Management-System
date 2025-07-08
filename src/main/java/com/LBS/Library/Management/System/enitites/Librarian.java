@@ -25,15 +25,15 @@ public class Librarian {
     private String email;
     @Column(name = "phone_number", nullable = false)
     private String phone_number;
-    @OneToOne
-    @JoinColumn(name = "imageId")
-    private ImageData passport;
+//    @OneToOne
+//    @JoinColumn(name = "imageId")
+//    private ImageData passport;
     @Column(name = "password")
     private String password;
     @Column(name = "role")
     private Role role;
 
-    public void setPassportPhoto(ImageData passport){
-        passport.setLibrarian(this);
-    }
+//    public void setPassportPhoto(ImageData passport){
+//        passport.setLibrarian(this);
+//    }
 }

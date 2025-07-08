@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<RentalDto> viewBorrowedHistory(String uniqueId) {
-        User user = userRepository.findByuniqueID(uniqueId);
+    public List<RentalDto> viewBorrowedHistory(String email) {
+        User user = userRepository.findByemail(email);
         if(user.getEmail() == null) {
             throw new UserNotFoundException("User not found");
         }
@@ -115,8 +115,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User viewProfile(String uniqueId) {
-        User user = userRepository.findByuniqueID(uniqueId);
+    public User viewProfile(String email) {
+        User user = userRepository.findByemail(email);
         if(user.getEmail() == null){
             throw new UserNotFoundException("User not found!");
         }

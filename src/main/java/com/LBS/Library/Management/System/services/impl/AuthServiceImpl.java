@@ -55,30 +55,31 @@ public class AuthServiceImpl implements AuthService {
         newUser.setEmail(userRegistrationDto.getEmail());
         newUser.setPhone_no(userRegistrationDto.getEmail());
         newUser.setRole(Role.CUSTOMER);
+        newUser.setUniqueID();
         newUser.setPassword(encoder.encode(userRegistrationDto.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(newUser));
     }
 
     @Override
-    public ResponseEntity<Object> registerLibrarian(LibrarianRegistrationDto librarianRegistrationDto) throws IOException {
+    public ResponseEntity<Object> registerLibrarian(LibrarianRegistrationDto librarianRegistrationDto){
         Librarian librarian = librarianRepository.findByEmail(librarianRegistrationDto.getEmail());
         if (librarian != null){
             throw new UserAlreadyExistsException("This Email is already in use!");
         }
         BCryptPasswordEncoder encoder =  new BCryptPasswordEncoder();
         Librarian newLibrarian = new Librarian();
-        ImageData imageData = ImageData.builder()
-                .imageName(librarianRegistrationDto.getPassport().getOriginalFilename())
-                .imageType(librarianRegistrationDto.getPassport().getContentType())
-                .imageData(ImageUtil.compressImage(librarianRegistrationDto.getPassport().getBytes()))
-                .build();
+//        ImageData imageData = ImageData.builder()
+//                .imageName(librarianRegistrationDto.getPassport().getOriginalFilename())
+//                .imageType(librarianRegistrationDto.getPassport().getContentType())
+//                .imageData(ImageUtil.compressImage(librarianRegistrationDto.getPassport().getBytes()))
+//                .build();
         newLibrarian.setName(librarianRegistrationDto.getName());
         newLibrarian.setEmail(librarianRegistrationDto.getEmail());
         newLibrarian.setPhone_number(librarianRegistrationDto.getPhoneNumber());
         newLibrarian.setPassword(encoder.encode(librarianRegistrationDto.getPassword()));
         newLibrarian.setRole(Role.LIBRARIAN);
-        newLibrarian.setPassportPhoto(imageData);
-        librarianPassportRepository.save(imageData);
+//        newLibrarian.setPassportPhoto(imageData);
+//        librarianPassportRepository.save(imageData);
         return ResponseEntity.status(HttpStatus.CREATED).body(librarianRepository.save(newLibrarian));
     }
 

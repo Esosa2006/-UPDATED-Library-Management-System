@@ -23,7 +23,7 @@ public class ImageData {
     @Lob
     @Column(name = "imageData", length = 1000)
     private byte[] imageData;
-    @OneToOne(mappedBy = "passport")
-    private Librarian librarian;
+//    @OneToOne(mappedBy = "passport")
+//    private Librarian librarian;
 
 }
