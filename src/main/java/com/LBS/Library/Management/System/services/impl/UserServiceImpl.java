@@ -3,6 +3,7 @@ package com.LBS.Library.Management.System.services.impl;
 import com.LBS.Library.Management.System.AvailabilityStatus;
 import com.LBS.Library.Management.System.dtos.RentalDto;
 import com.LBS.Library.Management.System.dtos.UserViewBookDto;
+import com.LBS.Library.Management.System.dtos.UserViewDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.Rental;
 import com.LBS.Library.Management.System.enitites.User;
@@ -14,6 +15,7 @@ import com.LBS.Library.Management.System.exceptions.userExceptions.UserAlreadyHa
 import com.LBS.Library.Management.System.exceptions.userExceptions.UserNotFoundException;
 import com.LBS.Library.Management.System.mappers.BookMapper;
 import com.LBS.Library.Management.System.mappers.RentalsMapper;
+import com.LBS.Library.Management.System.mappers.UserProfileMapper;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
@@ -31,15 +33,17 @@ public class UserServiceImpl implements UserService {
     private final BookMapper bookMapper;
     private final UserRepository userRepository;
     private final RentalRepository rentalRepository;
-    private  final RentalsMapper rentalsMapper;
+    private final RentalsMapper rentalsMapper;
+    private final UserProfileMapper userProfileMapper;
 
     @Autowired
-    public UserServiceImpl(BookRepository bookRepository, BookMapper bookMapper, UserRepository userRepository, RentalRepository rentalRepository, RentalsMapper rentalsMapper) {
+    public UserServiceImpl(BookRepository bookRepository, BookMapper bookMapper, UserRepository userRepository, RentalRepository rentalRepository, RentalsMapper rentalsMapper, UserProfileMapper userProfileMapper) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
         this.userRepository = userRepository;
         this.rentalRepository = rentalRepository;
         this.rentalsMapper = rentalsMapper;
+        this.userProfileMapper = userProfileMapper;
     }
 
     @Override
@@ -115,11 +119,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User viewProfile(String email) {
+    public UserViewDto viewProfile(String email) {
         User user = userRepository.findByemail(email);
         if(user.getEmail() == null){
             throw new UserNotFoundException("User not found!");
         }
-        return user;
+        return userProfileMapper.toDto(user);
     }
 }

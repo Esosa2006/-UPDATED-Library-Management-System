@@ -3,6 +3,7 @@ package com.LBS.Library.Management.System.controllers;
 import com.LBS.Library.Management.System.dtos.BookNameRequest;
 import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.dtos.RentalDto;
+import com.LBS.Library.Management.System.dtos.UserViewDto;
 import com.LBS.Library.Management.System.enitites.Book;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.services.UserService;
@@ -30,7 +31,7 @@ public class UserController {
         return userService.viewBorrowedHistory(email);
     }
     @GetMapping("/profile")
-    public User viewProfile(Authentication authentication){
+    public UserViewDto viewProfile(Authentication authentication){
         String email = authentication.getName();
         return userService.viewProfile(email);
     }
