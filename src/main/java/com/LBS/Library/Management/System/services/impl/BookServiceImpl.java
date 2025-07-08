@@ -2,6 +2,8 @@ package com.LBS.Library.Management.System.services.impl;
 
 import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.enitites.Book;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.AuthorNotFoundException;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.CategoryNotFoundException;
 import com.LBS.Library.Management.System.mappers.BookMapper;
 import com.LBS.Library.Management.System.repositories.BookRepository;
 import com.LBS.Library.Management.System.services.BookService;
@@ -28,11 +30,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<UserViewBookDto> getByAuthor(String author) {
+        if (bookRepository.findAllByauthor(author).isEmpty()){
+            throw new AuthorNotFoundException("No author found");
+        }
         return bookRepository.findAllByauthor(author).stream().map(bookMapper::toDto).toList();
     }
 
     @Override
     public List<UserViewBookDto> getByCategory(String category) {
+        if (bookRepository.findAllBycategory(category).isEmpty()){
+            throw new CategoryNotFoundException("No category found");
+        }
         return bookRepository.findAllBycategory(category).stream().map(bookMapper::toDto).toList();
     }
 

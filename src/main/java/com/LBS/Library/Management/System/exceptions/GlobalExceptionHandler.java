@@ -1,9 +1,6 @@
 package com.LBS.Library.Management.System.exceptions;
 
-import com.LBS.Library.Management.System.exceptions.bookExceptions.BookAlreadyExistsException;
-import com.LBS.Library.Management.System.exceptions.bookExceptions.BookLimitReachedException;
-import com.LBS.Library.Management.System.exceptions.bookExceptions.BookNotFoundException;
-import com.LBS.Library.Management.System.exceptions.bookExceptions.BookSoldOutException;
+import com.LBS.Library.Management.System.exceptions.bookExceptions.*;
 import com.LBS.Library.Management.System.exceptions.librarianExceptions.LibrarianAlreadyExistsException;
 import com.LBS.Library.Management.System.exceptions.userExceptions.UserAlreadyHasBookException;
 import com.LBS.Library.Management.System.exceptions.userExceptions.UserNotFoundException;
@@ -19,6 +16,24 @@ import java.time.ZonedDateTime;
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = {GlobalRuntimeException.class})
     public ResponseEntity<Object> handleRequestException(GlobalRuntimeException e){
+        Exception z = new Exception(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(z, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = {AuthorNotFoundException.class})
+    public ResponseEntity<Object> handleAuthorNotFoundException(AuthorNotFoundException e){
+        Exception z = new Exception(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+                return new ResponseEntity<>(z, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = {CategoryNotFoundException.class})
+    public ResponseEntity<Object> handleCategoryNotFoundException(CategoryNotFoundException e){
         Exception z = new Exception(
                 e.getMessage(),
                 HttpStatus.BAD_REQUEST,
