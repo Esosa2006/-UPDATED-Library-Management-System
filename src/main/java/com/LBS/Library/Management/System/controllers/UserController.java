@@ -31,7 +31,7 @@ public class UserController {
         return userService.viewBorrowedHistory(email);
     }
     @GetMapping("/profile")
-    public UserViewDto viewProfile(Authentication authentication){
+    public ResponseEntity<UserViewDto> viewProfile(Authentication authentication){
         String email = authentication.getName();
         return userService.viewProfile(email);
     }

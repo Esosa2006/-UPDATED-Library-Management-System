@@ -15,6 +15,7 @@ import com.LBS.Library.Management.System.repositories.UserRepository;
 import com.LBS.Library.Management.System.security.JWTService;
 import com.LBS.Library.Management.System.services.AuthService;
 import com.LBS.Library.Management.System.util.ImageUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
@@ -47,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<Object> register(UserRegistrationDto userRegistrationDto) {
         User user = userRepository.findByemail(userRegistrationDto.getEmail());
         if (user != null){
+            log.error("User email does not exists in repo");
             throw new UserAlreadyExistsException("This Email is already in use!");
         }
         BCryptPasswordEncoder encoder =  new BCryptPasswordEncoder();
@@ -57,13 +60,16 @@ public class AuthServiceImpl implements AuthService {
         newUser.setRole(Role.CUSTOMER);
         newUser.setUniqueID();
         newUser.setPassword(encoder.encode(userRegistrationDto.getPassword()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(newUser));
+        userRepository.save(newUser);
+        log.info("New User created!");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful!");
     }
 
     @Override
     public ResponseEntity<Object> registerLibrarian(LibrarianRegistrationDto librarianRegistrationDto){
         Librarian librarian = librarianRepository.findByEmail(librarianRegistrationDto.getEmail());
         if (librarian != null){
+            log.error("This email already exists in repo");
             throw new UserAlreadyExistsException("This Email is already in use!");
         }
         BCryptPasswordEncoder encoder =  new BCryptPasswordEncoder();
@@ -78,9 +84,11 @@ public class AuthServiceImpl implements AuthService {
         newLibrarian.setPhone_number(librarianRegistrationDto.getPhoneNumber());
         newLibrarian.setPassword(encoder.encode(librarianRegistrationDto.getPassword()));
         newLibrarian.setRole(Role.LIBRARIAN);
+        librarianRepository.save(newLibrarian);
 //        newLibrarian.setPassportPhoto(imageData);
 //        librarianPassportRepository.save(imageData);
-        return ResponseEntity.status(HttpStatus.CREATED).body(librarianRepository.save(newLibrarian));
+        log.info("Librarian created");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful");
     }
 
 
@@ -88,8 +96,10 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<Object> login(LoginDto loginDto) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         if (!authentication.isAuthenticated()){
+            log.error("User authentication failed!");
             throw new GlobalRuntimeException("Authentication Failed!");
         }
+        log.info("Authentication successful!");
         return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken(loginDto.getEmail()));
 
     }

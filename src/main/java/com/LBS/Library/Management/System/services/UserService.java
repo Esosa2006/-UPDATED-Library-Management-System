@@ -1,10 +1,7 @@
 package com.LBS.Library.Management.System.services;
 
 import com.LBS.Library.Management.System.dtos.RentalDto;
-import com.LBS.Library.Management.System.dtos.UserViewBookDto;
 import com.LBS.Library.Management.System.dtos.UserViewDto;
-import com.LBS.Library.Management.System.enitites.User;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -16,5 +13,5 @@ public interface UserService {
 
     ResponseEntity<String> returnBook(String email, String bookName);
 
-    UserViewDto viewProfile(String uniqueId);
+    ResponseEntity<UserViewDto> viewProfile(String email);
 }

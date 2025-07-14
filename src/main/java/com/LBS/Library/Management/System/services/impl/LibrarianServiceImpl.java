@@ -1,17 +1,14 @@
 package com.LBS.Library.Management.System.services.impl;
 
 import com.LBS.Library.Management.System.dtos.BookRegistrationDto;
-import com.LBS.Library.Management.System.dtos.UserRegistrationDto;
 import com.LBS.Library.Management.System.enitites.Book;
-import com.LBS.Library.Management.System.enitites.Rental;
 import com.LBS.Library.Management.System.enitites.User;
 import com.LBS.Library.Management.System.exceptions.bookExceptions.BookAlreadyExistsException;
 import com.LBS.Library.Management.System.exceptions.bookExceptions.BookNotFoundException;
 import com.LBS.Library.Management.System.repositories.BookRepository;
-import com.LBS.Library.Management.System.repositories.RentalRepository;
 import com.LBS.Library.Management.System.repositories.UserRepository;
 import com.LBS.Library.Management.System.services.LibrarianService;
-import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class LibrarianServiceImpl implements LibrarianService {
     private final BookRepository bookRepository;
@@ -39,6 +37,7 @@ public class LibrarianServiceImpl implements LibrarianService {
         book.setCategory(bookRegistrationDto.getCategory());
         book.setQuantity(bookRegistrationDto.getQuantity());
         if (bookRepository.findBybookName(bookRegistrationDto.getBookName()) != null){
+            log.error("Book name already exists in repo");
             throw new BookAlreadyExistsException("Book already exists in inventory");
         }
         book.setStatus();
@@ -82,5 +81,6 @@ public class LibrarianServiceImpl implements LibrarianService {
             book.setStatus();
             bookRepository.save(book);
         }
+        log.info("Books successfully saved!");
     }
 }
