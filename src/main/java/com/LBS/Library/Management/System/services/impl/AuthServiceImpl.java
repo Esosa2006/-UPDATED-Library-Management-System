@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
         newUser.setUniqueID();
         newUser.setPassword(encoder.encode(userRegistrationDto.getPassword()));
         userRepository.save(newUser);
-        log.info("New User created!");
+        log.info("New User created : {}", newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful!");
     }
 
@@ -87,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
         librarianRepository.save(newLibrarian);
 //        newLibrarian.setPassportPhoto(imageData);
 //        librarianPassportRepository.save(imageData);
-        log.info("Librarian created");
+        log.info("Librarian created : {}", newLibrarian);
         return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful");
     }
 
