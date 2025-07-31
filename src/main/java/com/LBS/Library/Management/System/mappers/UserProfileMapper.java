@@ -2,7 +2,9 @@ package com.LBS.Library.Management.System.mappers;
 
 import com.LBS.Library.Management.System.dtos.UserViewDto;
 import com.LBS.Library.Management.System.enitites.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserProfileMapper {
     public UserViewDto toDto(User user){
         UserViewDto userViewDto = new UserViewDto();

@@ -46,7 +46,7 @@ public class JWTService {
         return getClaims(token).getSubject();
     }
 
-    public Date getExpiration(String token){
+    private Date getExpiration(String token){
         return getClaims(token).getExpiration();
     }
 
